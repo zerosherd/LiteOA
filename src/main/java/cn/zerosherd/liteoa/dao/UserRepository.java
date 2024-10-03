@@ -1,4 +1,4 @@
-package cn.zerosherd.liteoa.utility;
+package cn.zerosherd.liteoa.dao;
 
 import cn.zerosherd.liteoa.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -66,14 +66,6 @@ import java.util.List;
  */
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    User findByusername(String username);
-
-    User findByusernameOrEmail(String username, String email);
-
-    Long countByusername(String username);
-
-    List<User> findByusernameLike(String username);
-
-    User findByusernameIgnoreCase(String username);
+    List<User> findByUsername(String username);
 
 }

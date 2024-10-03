@@ -1,121 +1,140 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OA System Login</title>
+    <title>Login</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
         body {
-            font-family: Arial, sans-serif;
             background-size: cover;
-            background-position: center;
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
         }
 
         .login-container {
-            position: relative;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
             width: 400px;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-            background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent white */
-        }
-
-        /* Create a blurred background effect using ::before */
-        .login-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border-radius: 10px;
-            background-color: rgba(255, 255, 255, 0.5);
-            backdrop-filter: blur(10px); /* Blurred effect */
-            z-index: -1; /* Puts the blur behind the content */
+            text-align: center;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
         }
 
         h2 {
-            text-align: center;
             margin-bottom: 20px;
+            font-size: 24px;
             color: #333;
         }
 
         input[type="text"], input[type="password"] {
-            width: 95%;
+            width: 100%;
             padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
+            margin-bottom: 15px;
+            border: none;
             border-radius: 5px;
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            font-size: 16px;
         }
 
         input[type="submit"] {
-            width: 100%;
+            width: 95%;
             padding: 10px;
             background-color: #4CAF50;
             color: white;
             border: none;
             border-radius: 5px;
+            font-size: 16px;
             cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        input:focus {
+            outline: none;
         }
 
         .error-message {
             color: red;
-            text-align: center;
-        }
-
-        .forgot-password {
-            text-align: center;
             margin-top: 10px;
+            font-size: 14px;
         }
 
-        .forgot-password a {
+        .login-links {
+            margin-top: 15px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+        }
+
+        .login-links a {
+            color: #4CAF50;
             text-decoration: none;
-            color: #007BFF;
-            font-size: 0.9em;
         }
 
-        .forgot-password a:hover {
-            color: #0056b3;
+        .login-links a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .login-container {
+                width: 90%;
+            }
+
+            .login-links {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .login-links a {
+                margin-bottom: 10px;
+            }
         }
     </style>
 </head>
 <body>
 
 <div class="login-container">
-    <h2>Login to OA System</h2>
-    <form id="loginForm">
-        <input type="text" id="username" name="username" placeholder="Username" required>
-        <input type="password" id="password" name="password" placeholder="Password" required>
+    <h2>Login</h2>
+
+    <form action="/login" method="post">
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="password" name="password" placeholder="Password" required>
         <input type="submit" value="Login">
-        <div class="error-message" id="errorMessage"></div>
+
+        <!-- Error Message -->
+        <div th:if="${errorMessage != null}" class="error-message" th:text="${errorMessage}"></div>
     </form>
-    <div class="forgot-password">
-        <a href="/forgot-password">Forgot Password?</a>
+
+    <div class="login-links">
+        <a href="forgot-password.html">Forgot Password?</a>
+        <a href="register.html">Create an Account</a>
     </div>
 </div>
 
-<script src="/static/js/jquery-3.7.1.js"></script>
 <script>
-    // Function to get the current day and change the background image accordingly
     async function setDailyBackground() {
         const url = 'https://raw.onmicrosoft.cn/Bing-Wallpaper-Action/main/data/zh-CN_all.json';
-
         try {
-            // Fetch the JSON data
             const response = await fetch(url);
             const data = await response.json();
-
             const randomNumber = Math.floor(Math.random() * data.Total);
             const getThatUrl = data.data[randomNumber].url;
-
             // Extract the URL of the current day's wallpaper
             const wallpaperUrl = `https://www.bing.com${getThatUrl}`;
-
             // Set the background image
             document.body.style.backgroundImage = `url('${wallpaperUrl}')`;
         } catch (error) {
@@ -123,24 +142,8 @@
         }
     }
 
-    // Run the function to set the background on page load
     setDailyBackground();
 
-    document.getElementById('loginForm').addEventListener('submit', function(event) {
-        event.preventDefault();
-
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
-        const errorMessage = document.getElementById('errorMessage');
-
-        if (username === '' || password === '') {
-            errorMessage.textContent = 'Please fill in all fields.';
-        } else {
-            errorMessage.textContent = '';
-            alert('Login successful!'); // Placeholder for successful login
-        }
-    });
 </script>
-
 </body>
 </html>

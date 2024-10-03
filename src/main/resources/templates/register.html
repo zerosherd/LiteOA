@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Arial', sans-serif;
+    }
+
+    body {
+      background-size: cover;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .registration-container {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 30px;
+      width: 350px;
+      text-align: center;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      font-size: 24px;
+      color: #333;
+    }
+
+    input[type="text"], input[type="password"], input[type="email"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: none;
+      border-radius: 5px;
+      background: rgba(255, 255, 255, 0.8);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      font-size: 16px;
+    }
+
+    input[type="submit"] {
+      width: 100%;
+      padding: 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #45a049;
+    }
+
+    .error-message {
+      color: red;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    .register-link {
+      margin-top: 15px;
+    }
+
+    .register-link a {
+      color: #4CAF50;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .register-link a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      .registration-container {
+        width: 90%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="registration-container">
+  <h2>Create a New Account</h2>
+
+  <form action="register" method="post">
+    <input type="text" name="username" placeholder="Username" required>
+    <input type="password" name="password" placeholder="Password" required>
+    <input type="password" name="confirmPassword" placeholder="Confirm Password" required>
+    <input type="email" name="email" placeholder="Email" required>
+    <input type="submit" value="Register">
+
+    <!-- Error Message -->
+    <div th:if="${errorMessage != null}" class="error-message" th:text="${errorMessage}"></div>
+  </form>
+
+  <div class="register-link">
+    <p>Already have an account? <a href="login.html">Login here</a></p>
+  </div>
+</div>
+
+<script>
+  async function setDailyBackground() {
+    const url = 'https://raw.onmicrosoft.cn/Bing-Wallpaper-Action/main/data/zh-CN_all.json';
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+      const randomNumber = Math.floor(Math.random() * data.Total);
+      const getThatUrl = data.data[randomNumber].url;
+      // Extract the URL of the current day's wallpaper
+      const wallpaperUrl = `https://www.bing.com${getThatUrl}`;
+      // Set the background image
+      document.body.style.backgroundImage = `url('${wallpaperUrl}')`;
+    } catch (error) {
+      console.error('Error fetching the Bing wallpaper:', error);
+    }
+  }
+
+  setDailyBackground();
+
+</script>
+</body>
+</html>

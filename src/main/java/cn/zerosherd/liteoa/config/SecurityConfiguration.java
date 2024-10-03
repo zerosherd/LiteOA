@@ -5,10 +5,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -16,25 +14,11 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfiguration{
 
-    /*重写加密方式*/
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    public PasswordEncoder passwordEncoder(){
+//        return NoOpPasswordEncoder.getInstance();  // 不加密
+        return new BCryptPasswordEncoder(); // 加密方式bcrypt
     }
-
-    /**
-     * 基于数据源的用户认证
-     */
-    @Bean
-    UserDetailsService userDetailsService() {
-        return new UserDetailsService() {
-            @Override
-            public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-                return null;
-            }
-        };
-    }
-
 
     /**
      * HttpSecurity功能设置，根据功能，得到自己的过滤器链
@@ -45,14 +29,11 @@ public class SecurityConfiguration{
                  .authorizeHttpRequests(authorize ->
                         authorize
                                 // /login 放行
-                                .requestMatchers("/login.html").permitAll()
-                                // /test1路径需要test1权限
-                                .requestMatchers("/index").permitAll()
-                                // 其他任何资源请求
-                                // 任何资源请求
-                                .anyRequest()
-                                // 都需要登陆
-                                .authenticated()
+                                .requestMatchers("/login","/logout","/register","/register.html","/forgot-password","forgot-password.html","/all").permitAll()
+                                // 放行静态资源
+                                .requestMatchers("/css/**","/js/**","/img/**").permitAll()
+                                // 任何资源请求都需要登陆
+                                .anyRequest().authenticated()
                 )
                 // 自定义登陆页面
                 .formLogin(form -> {

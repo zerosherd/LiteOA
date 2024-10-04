@@ -1,7 +1,7 @@
 package cn.zerosherd.liteoa.controller.search;
 
-import cn.zerosherd.liteoa.dao.UserRepository;
-import cn.zerosherd.liteoa.entity.User;
+import cn.zerosherd.liteoa.dao.user.UserRepository;
+import cn.zerosherd.liteoa.entity.user.User;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

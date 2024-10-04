@@ -1,4 +1,4 @@
-package cn.zerosherd.liteoa.entity;
+package cn.zerosherd.liteoa.entity.user;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

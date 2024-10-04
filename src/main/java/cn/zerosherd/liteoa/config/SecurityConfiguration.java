@@ -28,7 +28,7 @@ public class SecurityConfiguration{
         http// 权限设置
                  .authorizeHttpRequests(authorize ->
                         authorize
-                                // /login 放行
+                                // 放行无需授权的页面
                                 .requestMatchers("/login","/logout","/register","/register.html","/forgot-password","forgot-password.html","/all").permitAll()
                                 // 放行静态资源
                                 .requestMatchers("/css/**","/js/**","/img/**").permitAll()
@@ -38,14 +38,8 @@ public class SecurityConfiguration{
                 // 自定义登陆页面
                 .formLogin(form -> {
                     form.loginPage("/login.html").permitAll()
-                            //自定义表单用户名参数，默认是username
-                            .usernameParameter("username")
-                            //自定义表单密码参数，默认是password
-                            .passwordParameter("password")
                             //登录失败的返回地址，加了参数，是因为有这个参数，页面会有提示
                             .failureUrl("/login?error")
-                            //登陆成功的页面
-                            .defaultSuccessUrl("/index.html")
                     ;
                 });
         // 关闭post请求的 csrf

@@ -1,8 +1,10 @@
 package cn.zerosherd.liteoa.controller.login;
 
 
-import cn.zerosherd.liteoa.entity.User;
-import cn.zerosherd.liteoa.dao.UserRepository;
+import cn.zerosherd.liteoa.dao.dept.DeptRepository;
+import cn.zerosherd.liteoa.entity.dept.Dept;
+import cn.zerosherd.liteoa.entity.user.User;
+import cn.zerosherd.liteoa.dao.user.UserRepository;
 import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,6 +22,8 @@ public class LoginController {
 
     @Resource
     private UserRepository userRepository;
+    @Autowired
+    private DeptRepository deptRepository;
 
     @RequestMapping("/")
     public String redirect() {
@@ -38,13 +42,20 @@ public class LoginController {
     @PostMapping(path = "/login")
     public String login(@RequestParam String username, @RequestParam String password, Model model) {
         List<User> users = userRepository.findByUsername(username);
+
         // 如果数据库中未查到该账号:
         if (users.isEmpty()) {
             model.addAttribute("errorMessage","用户不存在");
             return "login";
         } else {
             User user = users.get(0);
+            List<Dept> depts = deptRepository.findById(user.getDept());
+            Dept dept = depts.get(0);
             if (passwordEncoder.matches(password, user.getPassword())) {
+                model.addAttribute("userName",user.getUsername());
+                model.addAttribute("mail",user.getEmail());
+                model.addAttribute("deptName",dept.getDeptname());
+                model.addAttribute("companyName","中华人民共和国");
                 return "index";
             } else {
                 model.addAttribute("errorMessage","密码错误");

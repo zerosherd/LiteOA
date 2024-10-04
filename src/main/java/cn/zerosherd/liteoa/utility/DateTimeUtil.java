@@ -4,7 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class dateTimeUtil {
+public class DateTimeUtil {
 
     public static Date getFormattedDateTime() throws ParseException {
         Date now = new Date();

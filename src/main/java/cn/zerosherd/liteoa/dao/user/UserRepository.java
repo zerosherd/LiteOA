@@ -1,6 +1,6 @@
-package cn.zerosherd.liteoa.dao;
+package cn.zerosherd.liteoa.dao.user;
 
-import cn.zerosherd.liteoa.entity.User;
+import cn.zerosherd.liteoa.entity.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
